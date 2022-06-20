@@ -1,6 +1,9 @@
-const { SignUp, SignIn } = require("../handlers/userHandler")
-const joi = require("joi")
-
+const {
+  SignUp,
+  SignIn,
+  getLoggedInUserData,
+} = require("../handlers/userHandler")
+const mongoose = require("mongoose")
 const signUpOptions = {
   schema: {
     tags: ["User"],
@@ -12,10 +15,10 @@ const signUpOptions = {
           UserDate: {
             type: "object",
             properties: {
-              _id: { type: "string", example: "some document id" },
-              email: { type: "string", example: "example@domain.com" },
-              firstName: { type: "string", example: "user_name" },
-              token: { type: "string", example: "token" },
+              _id: { type: "string" },
+              email: { type: "string" },
+              firstName: { type: "string" },
+              token: { type: "string" },
             },
           },
         },
@@ -40,8 +43,8 @@ const signinOptions = {
     body: {
       type: "object",
       properties: {
-        email: { type: "string", example: "example@domain.com" },
-        password: { type: "string", example: "123456" },
+        email: { type: "string" },
+        password: { type: "string" },
       },
     },
     response: {
@@ -59,15 +62,39 @@ const signinOptions = {
           },
         },
       },
-      404:{
-        type:"object",
-        properties:{
-            message:{type:"string"}
-        }
-      }
+      404: {
+        type: "object",
+        properties: {
+          message: { type: "string" },
+        },
+      },
     },
   },
-  handler:SignIn
+  handler: SignIn,
 }
 
-module.exports = { signUpOptions, signinOptions }
+const getSingleUserOpts = {
+  schema: {
+    tags: ["User"],
+    summary: "Get current loggedin user data",
+    response: {
+      200: {
+        type: "object",
+        properties: {
+          _id: { type: mongoose.Schema.Types.ObjectId },
+          firstName: { type: "string" },
+          email: { type: "string" },
+          pic: { type: "string" },
+        },
+      },
+      404: {
+        type: "object",
+        properties: {
+          message: { type: "string" },
+        },
+      },
+    },
+  },
+}
+
+module.exports = { signUpOptions, signinOptions, getSingleUserOpts }
