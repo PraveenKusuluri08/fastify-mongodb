@@ -7,6 +7,11 @@ const todoSchema = mongoose.Schema(
             required: true,
             trim: false
         },
+        description:{
+          type:String,
+          required:true,
+          trim:false
+        },
         status:{
             type:Boolean,
             default:false,
@@ -17,7 +22,6 @@ const todoSchema = mongoose.Schema(
         },
         user:{
             type:mongoose.Schema.Types.ObjectId,
-            required:true,
             ref:'User'
         }
     },{timestamps:true}

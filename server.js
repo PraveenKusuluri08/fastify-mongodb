@@ -19,10 +19,13 @@ DbConnection()
 const PORT = process.env.PORT || 8080
 console.log(colors.blue("env"), process.env.PORT, PORT)
 const userRoutes = require("./routes/users")
+const TodoRoutes = require("./routes/todo")
 fastify.get("/", (req, reply) => {
   reply.code(200).send({ message: "HELLO API" })
 })
 fastify.register(userRoutes)
+
+fastify.register(TodoRoutes)
 fastify.listen(8000, (err, address) => {
   if (err) {
     fastify.log.error(err)
