@@ -1,7 +1,7 @@
-const { createTodoOpts } = require("../controllers/schemas/todos")
+const { createTodoOpts, getAllTodosOpts, getAllTodosOfUserOpts, updateTodoOpts, completeTodoOpts} = require("../controllers/schemas/todos")
 const {
   createTodoHandler,
-  getAllTodosHandler,
+  getAllTodosHandler, getTodos, updateTodo, completeTodo,
 } = require("../controllers/handlers/todoHandler")
 const endPoint = require("../helpers/endPoint")
 
@@ -13,6 +13,21 @@ const createTodo = {
 const getAllTodos = {
   schema: getAllTodosOpts,
   handler: getAllTodosHandler,
+}
+
+const getAllTodosOfUser= {
+  schema:getAllTodosOfUserOpts,
+  handler:getTodos
+}
+
+const updateTodoResolver={
+  schema:updateTodoOpts,
+  handler:updateTodo
+}
+
+const completeTodoResolver={
+  schema:completeTodoOpts,
+  handler:completeTodo
 }
 
 const TodoRoutes = (fastify, options, done) => {
@@ -29,6 +44,12 @@ function privateRoutes(fastify) {
     preHandler: fastify.auth([endPoint]),
     ...getAllTodos,
   })
+
+  fastify.get("/api/getallusertodos",{
+    preHandler:fastify.auth([endPoint]),
+    ...getAllTodosOfUser
+  })
+
 }
 
 module.exports = TodoRoutes
