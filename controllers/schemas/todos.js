@@ -27,7 +27,6 @@ const createTodoOpts = {
         },
     },
 }
-
 /**
  * @object getAllTodos With status
  */
@@ -60,7 +59,6 @@ const getAllTodosOpts = {
         },
     },
 }
-
 /**
  * * @object getAll todos of the user
  */
@@ -86,7 +84,6 @@ const getAllTodosOfUserOpts = {
         }
     }
 }
-
 const updateTodoOpts = {
     schema: {
         tags: ["Todo"],
@@ -126,7 +123,6 @@ const updateTodoOpts = {
         }
     }
 }
-
 const completeTodoOpts = {
     schema: {
         tags: ["Todo"],
@@ -166,4 +162,53 @@ const completeTodoOpts = {
         }
     }
 }
-module.exports = {createTodoOpts, getAllTodosOpts, getAllTodosOfUserOpts, updateTodoOpts, completeTodoOpts}
+
+const undoTodo={
+    schema:{
+        queryString:{
+            type: "object",
+            properties:{
+                todoId:{type:'string'}
+            }
+        },
+        response:{
+            204:{
+                type:"object",
+                properties:{
+                    message:{type:"string"}
+                }
+            },
+            404:{
+                type:"object",
+                properties:{
+                    message:{type:"string"}
+                }
+            }
+        }
+    }
+}
+const deleteTodo={
+    schema:{
+        queryString:{
+            type: "object",
+            properties:{
+                id:{type:'string'}
+            }
+        },
+        response:{
+            200:{
+                type:"object",
+                properties:{
+                    message:{type:"string"}
+                }
+            },
+            404:{
+                type:"object",
+                properties:{
+                    message:{type:"string"}
+                }
+            }
+        }
+    }
+}
+module.exports = {createTodoOpts, getAllTodosOpts, getAllTodosOfUserOpts, updateTodoOpts, completeTodoOpts,undoTodo,deleteTodo}
