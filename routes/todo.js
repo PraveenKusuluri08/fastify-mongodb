@@ -1,7 +1,8 @@
-const { createTodoOpts, getAllTodosOpts, getAllTodosOfUserOpts, updateTodoOpts, completeTodoOpts} = require("../controllers/schemas/todos")
+const { createTodoOpts, getAllTodosOpts, getAllTodosOfUserOpts, updateTodoOpts, completeTodoOpts, undoTodo, deleteTodo
+} = require("../controllers/schemas/todos")
 const {
   createTodoHandler,
-  getAllTodosHandler, getTodos, updateTodo, completeTodo,
+  getAllTodosHandler, getTodos, updateTodo, completeTodo, undoTodoHandler, deleteSingleTodo,
 } = require("../controllers/handlers/todoHandler")
 const endPoint = require("../helpers/endPoint")
 
@@ -30,6 +31,14 @@ const completeTodoResolver={
   handler:completeTodo
 }
 
+const undoTodoOpts = {
+  schema:undoTodo,
+  handler:undoTodoHandler
+}
+const deleteTodoOpts={
+  schema:deleteTodo,
+  handler:deleteSingleTodo
+}
 const TodoRoutes = (fastify, options, done) => {
   fastify.register(require("@fastify/auth")).after(() => privateRoutes(fastify))
   done()
@@ -50,6 +59,23 @@ function privateRoutes(fastify) {
     ...getAllTodosOfUser
   })
 
+  fastify.put("/api/updateTodo",{
+    preHandler:fastify.auth([endPoint]),
+    ...updateTodoResolver
+  })
+
+  fastify.put("/api/completeTodo",{
+    preHandler:fastify.auth([endPoint]),
+    ...completeTodoResolver
+  })
+  fastify.put("/api/undoTodo",{
+    preHandler:fastify.auth([endPoint]),
+    ...undoTodoOpts
+  })
+  fastify.delete("/api/deleteTodo",{
+    preHandler:fastify.auth([endPoint]),
+    ...deleteTodoOpts
+  })
 }
 
 module.exports = TodoRoutes
